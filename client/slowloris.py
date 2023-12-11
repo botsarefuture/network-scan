@@ -32,7 +32,6 @@ import psutil
 import time
 from typing import List
 
-# ... (existing code)
 
 def check_site_status(host: str, port: int, https: bool):
     try:

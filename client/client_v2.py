@@ -6,6 +6,8 @@ import socket
 
 from ddos import ddos
 
+from brut import brute
+
 BASE_URL = "base.url"
 
 def add_target(ip, attack_type, port=None, priority=1):
@@ -71,13 +73,11 @@ def perform_port_scan(ip, start_port, end_port):
     submit_results(results_data)
     return open_ports
 
-def perform_ddos_attack(ip):
+def perform_ddos_attack(target_ip, target_port=80, additional_info={}):
     # Implement your DDoS attack logic here
     print(f"Performing DDoS attack on {ip}")
 
 
-
-def perform_ddos_attack(target_ip, target_port=80, additional_info={}):
     ssl = additional_info.get("ssl", False)
 
     method = additional_info.get("method", None)
@@ -88,7 +88,8 @@ def perform_ddos_attack(target_ip, target_port=80, additional_info={}):
 def perform_bruteforce_attack(ip, username, password_list):
     # Implement your bruteforce attack logic here
     print(f"Performing bruteforce attack on {ip} with username {username} and password list {password_list}")
-
+    brute(ip)
+    
 def perform_aggressive_bruteforce_attack(ip):
     # Implement your aggressive bruteforce attack logic here
     print(f"Performing aggressive bruteforce attack on {ip}")
