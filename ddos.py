@@ -40,5 +40,6 @@ def ddos(host, port, ssl=False, method=None):
         perform_ddos_attack(host, port, 100)
 
 # Usage:
-ddos("", 443, True, 1)
-ddos("", 443, True, 1)
+# Methods:
+# 1. Slowloris
+# 2. Normal DDoS
