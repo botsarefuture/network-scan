@@ -168,4 +168,4 @@ def slowloris_attack(host: str, port: int, sockets: int, verbose: bool, randuser
         time.sleep(sleeptime)
 
 # Example Usage:
-#slowloris_attack("example.com", 80, 100, True, True, False, None, None, False, 5)
+slowloris_attack("example.com", 80, 100, True, True, False, None, None, False, 5)
