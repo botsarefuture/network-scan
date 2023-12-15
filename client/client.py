@@ -4,8 +4,7 @@ from port_scan import port_scan
 from subdomain import scan_subdomains
 from brute import main as brute_main
 
-
-title = """
+TITLE = """
 .##.....##.########.########..########
 .##.....##.##.......##.....##......##.
 .##.....##.##.......##.....##.....##..
@@ -15,25 +14,25 @@ title = """
 ....###....########.##.....##.########
 """
 
-print(title)
-def valikko():
+def menu():
     while True:
         display_menu()
-        select = input("Select function (q to quit): ")
+        choice = input("Select function (q to quit): ")
 
-        if select == '0':
+        if choice == '0':
             perform_ddos_attack_wrapper()
-        elif select == '1':
+        elif choice == '1':
             port_scan()
-        elif select == '2':
+        elif choice == '2':
             brute_main()
-        elif select == '3':
+        elif choice == '3':
             scan_subdomains()
-        elif select.lower() == 'q':
+        elif choice.lower() == 'q':
             print("Exiting program.")
             break
         else:
             print("Invalid option. Please choose a valid option.")
 
 if __name__ == "__main__":
-    valikko()
+    print(TITLE)
+    menu()

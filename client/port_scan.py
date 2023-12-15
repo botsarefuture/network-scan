@@ -1,7 +1,5 @@
 import socket
-
 from tqdm import tqdm
-
 
 # Dictionary containing information about common ports
 ports = {
@@ -47,13 +45,12 @@ ports = {
     8080: {"name": "HTTP Alternative", "short_name": "HTTP-ALT"},
     8443: {"name": "HTTPS Alternative", "short_name": "HTTPS-ALT"}}
 
-def perform_port_scan_function(ip, start_port, end_port):    
+def perform_port_scan_function(ip, start_port, end_port):
     print(f"[!] Now scanning {ip}")
     open_ports = []
 
     total_ports = end_port - start_port + 1
 
-    
     # Loop through the specified port range
     for port in tqdm(range(start_port, end_port + 1), desc=f"Scanning {ip}", unit="port"):
         try:

