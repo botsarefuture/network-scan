@@ -2,6 +2,8 @@ from menu import display_menu
 from ddos import perform_ddos_attack_wrapper
 from port_scan import port_scan
 from subdomain import scan_subdomains
+from brute import main as brute_main
+
 
 title = """
 .##.....##.########.########..########
@@ -24,7 +26,7 @@ def valikko():
         elif select == '1':
             port_scan()
         elif select == '2':
-            print("Bruteforce function not implemented")
+            brute_main()
         elif select == '3':
             scan_subdomains()
         elif select.lower() == 'q':
