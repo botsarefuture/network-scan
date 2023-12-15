@@ -22,7 +22,7 @@ def scan_subdomains_function(domain, gui=False):
             select = 1
 
         file_mapping = {1: 'common.txt', 2: '100.txt', 3: '500.txt', 4: '1000.txt', 5: '10000.txt'}
-        file = file_mapping[select]
+        file = file_mapping.get(select, 'common.txt')
 
         with open(f"subdomains/{file}", 'r') as f:
             subdomains_to_scan = f.readlines()
@@ -31,17 +31,13 @@ def scan_subdomains_function(domain, gui=False):
             subdomains_to_scan = f.readlines()
 
     try:
-        # Resolve the domain to get its IP address
         ip_address = socket.gethostbyname(domain)
-
         total_subdomains = len(subdomains_to_scan)
 
-        # Use tqdm to display a progress bar
         for subdomain in tqdm(subdomains_to_scan, desc="Scanning Subdomains", unit="subdomain"):
             subdomain = subdomain.strip()
             subdomain_full = f"{subdomain}.{domain}"
             try:
-                # Attempt to resolve the subdomain
                 subdomain_ip = socket.gethostbyname(subdomain_full)
                 subdomain_data = {"ip": subdomain_ip, "name": subdomain_full}
                 subdomains.append(subdomain_data)
@@ -64,3 +60,6 @@ def scan_subdomains():
             print(subdomain_data)
     except Exception as e:
         print(f"An error occurred: {e}")
+
+# Example usage
+#scan_subdomains()
