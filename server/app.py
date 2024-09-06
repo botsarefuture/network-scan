@@ -11,6 +11,7 @@ config = config.get_config()
 
 app = Flask(__name__)
 
+
 @app.route("/get_version/")
 def get_version():
     with open("version.txt", "r") as f:
@@ -18,18 +19,24 @@ def get_version():
 
     return jsonify({"version": version})
 
+
 @app.route("/ping/")
 def ping():
     ip_address = request.remote_addr
-    db.pings_collection.insert_one({"ip": ip_address, "time": datetime.now(), "access_route": request.access_route})
+    db.pings_collection.insert_one(
+        {"ip": ip_address, "time": datetime.now(), "access_route": request.access_route}
+    )
 
     to_prioritize = functions.check_and_notify()
 
     return jsonify({"status": "ok", "prioritize": to_prioritize})
 
+
 @app.route("/get_job/")
 def get_job():
-    job = db.jobs_collection.find_one({"done": False}).sort([("priority", pymongo.ASCENDING)])
+    job = db.jobs_collection.find_one({"done": False}).sort(
+        [("priority", pymongo.ASCENDING)]
+    )
 
     if not job == None:
         job["_id"] = str(job["_id"])
@@ -40,7 +47,8 @@ def get_job():
 
     if job == None:
         return jsonify({"status": "no_jobs"})
-    
+
+
 @app.route("/add_job/", methods=["POST"])
 def add_job():
     data = request.json
@@ -56,6 +64,7 @@ def add_job():
         db.jobs_collection.insert_one({"url": target_url, "job_type": job_type})
 
     return jsonify({"status": "ok"})
+
 
 if __name__ == "__main__":
     app.run(config.get("host"), config.get("port"))

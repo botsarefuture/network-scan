@@ -1,6 +1,7 @@
 from client_v2 import BASE_URL
 import requests
 
+
 def add_target(ip, attack_type, port=None, priority=1):
     url = f"{BASE_URL}/add_target"
     data = {"ip": ip, "type": attack_type, "port": port, "priority": priority}

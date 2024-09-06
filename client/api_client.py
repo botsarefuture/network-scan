@@ -4,20 +4,26 @@ from ddos import perform_ddos_attack_wrapper
 from port_scan import perform_port_scan
 from brut import brute
 
+
 def perform_ddos_attack(target_ip, target_port=80, additional_info={}):
     # Implement your DDoS attack logic here
     print(f"Performing DDoS attack on {target_ip}")
     # Your DDoS attack implementation goes here
 
+
 def perform_bruteforce_attack(ip, username, password_list):
     # Implement your bruteforce attack logic here
-    print(f"Performing bruteforce attack on {ip} with username {username} and password list {password_list}")
+    print(
+        f"Performing bruteforce attack on {ip} with username {username} and password list {password_list}"
+    )
     # Your bruteforce attack implementation goes here
+
 
 def perform_aggressive_bruteforce_attack(ip):
     # Implement your aggressive bruteforce attack logic here
     print(f"Performing aggressive bruteforce attack on {ip}")
     # Your aggressive bruteforce attack implementation goes here
+
 
 def main():
     while True:
@@ -44,7 +50,9 @@ def main():
             elif target_type == 1:
                 perform_ddos_attack(target_ip, target_port, additional_info)
             elif target_type == 2:
-                perform_bruteforce_attack(target_ip, "admin", ["password123", "admin123"])
+                perform_bruteforce_attack(
+                    target_ip, "admin", ["password123", "admin123"]
+                )
             elif target_type == 3:
                 perform_aggressive_bruteforce_attack(target_ip)
 
@@ -56,6 +64,7 @@ def main():
 
         # Sleep for a while before the next iteration
         time.sleep(60)  # Sleep for 60 seconds before the next iteration
+
 
 if __name__ == "__main__":
     main()

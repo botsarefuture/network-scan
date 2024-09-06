@@ -17,18 +17,27 @@ ports = {
     115: {"name": "SFTP (Simple File Transfer Protocol)", "short_name": "SFTP"},
     119: {"name": "NNTP (Network News Transfer Protocol)", "short_name": "NNTP"},
     123: {"name": "NTP (Network Time Protocol)", "short_name": "NTP"},
-    135: {"name": "MS RPC (Microsoft Remote Procedure Call Protocol)", "short_name": "MS-RPC"},
+    135: {
+        "name": "MS RPC (Microsoft Remote Procedure Call Protocol)",
+        "short_name": "MS-RPC",
+    },
     137: {"name": "NetBIOS Name Service", "short_name": "NETBIOS-NS"},
     138: {"name": "NetBIOS Datagram Service", "short_name": "NETBIOS-DGM"},
     139: {"name": "NetBIOS Session Service", "short_name": "NETBIOS-SSN"},
-    143: {"name": "IMAP4 (Internet Message Access Protocol version 4)", "short_name": "IMAP"},
+    143: {
+        "name": "IMAP4 (Internet Message Access Protocol version 4)",
+        "short_name": "IMAP",
+    },
     161: {"name": "SNMP (Simple Network Management Protocol)", "short_name": "SNMP"},
     162: {"name": "SNMP Trap", "short_name": "SNMP-TRAP"},
     179: {"name": "BGP (Border Gateway Protocol)", "short_name": "BGP"},
     194: {"name": "IRC (Internet Relay Chat)", "short_name": "IRC"},
     389: {"name": "LDAP (Lightweight Directory Access Protocol)", "short_name": "LDAP"},
     443: {"name": "HTTPS (Hypertext Transfer Protocol Secure)", "short_name": "HTTPS"},
-    445: {"name": "Microsoft-DS (Microsoft Directory Services)", "short_name": "MICROSOFT-DS"},
+    445: {
+        "name": "Microsoft-DS (Microsoft Directory Services)",
+        "short_name": "MICROSOFT-DS",
+    },
     465: {"name": "SMTPS (SMTP Secure)", "short_name": "SMTPS"},
     514: {"name": "Syslog", "short_name": "SYSLOG"},
     587: {"name": "SMTP (Submission)", "short_name": "SUBMISSION"},
@@ -43,7 +52,9 @@ ports = {
     5432: {"name": "PostgreSQL", "short_name": "POSTGRES"},
     5900: {"name": "VNC (Virtual Network Computing)", "short_name": "VNC"},
     8080: {"name": "HTTP Alternative", "short_name": "HTTP-ALT"},
-    8443: {"name": "HTTPS Alternative", "short_name": "HTTPS-ALT"}}
+    8443: {"name": "HTTPS Alternative", "short_name": "HTTPS-ALT"},
+}
+
 
 def perform_port_scan_function(ip, start_port, end_port):
     print(f"[!] Now scanning {ip}")
@@ -52,7 +63,9 @@ def perform_port_scan_function(ip, start_port, end_port):
     total_ports = end_port - start_port + 1
 
     # Loop through the specified port range
-    for port in tqdm(range(start_port, end_port + 1), desc=f"Scanning {ip}", unit="port"):
+    for port in tqdm(
+        range(start_port, end_port + 1), desc=f"Scanning {ip}", unit="port"
+    ):
         try:
             # Attempt to create a connection to the IP and port
             with socket.create_connection((ip, port), timeout=1) as sock:
@@ -65,6 +78,7 @@ def perform_port_scan_function(ip, start_port, end_port):
 
     print("\nScan complete.")
     return {"open_ports": open_ports}
+
 
 def port_scan():
     try:

@@ -3,7 +3,9 @@ from pymongo import MongoClient
 import time
 
 app = Flask(__name__)
-mongo_client = MongoClient("mongodb://10.0.0.1:27017/?directConnection=true&authMechanism=DEFAULT")
+mongo_client = MongoClient(
+    "mongodb://10.0.0.1:27017/?directConnection=true&authMechanism=DEFAULT"
+)
 db = mongo_client["scan"]
 ips = db["ips"]
 results = db["results"]
@@ -11,7 +13,9 @@ ip_visits_collection = db["ip_visits"]  # New collection for storing IP visits
 
 
 def get_ips():
-    ip = ips.find_one_and_update({"gaved": False}, {"$set": {"gaved": True}}, projection={"ip": True})
+    ip = ips.find_one_and_update(
+        {"gaved": False}, {"$set": {"gaved": True}}, projection={"ip": True}
+    )
     return ip["ip"] if ip else None
 
 
@@ -22,9 +26,11 @@ def get_ip():
     # Track IP visits
     timestamp = int(time.time())
     if ip:
-        client_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+        client_ip = request.environ.get("HTTP_X_REAL_IP", request.remote_addr)
 
-        ip_visits_collection.insert_one({"client_ip": client_ip, "ip": ip, "timestamp": timestamp})
+        ip_visits_collection.insert_one(
+            {"client_ip": client_ip, "ip": ip, "timestamp": timestamp}
+        )
 
     return jsonify({"ip": ip}) if ip else jsonify({"error": "No more ips"})
 
@@ -54,10 +60,12 @@ def get_results():
 def get_ip_visits_in_hour():
     current_time = int(time.time())
     hour_ago = current_time - 3600
-    
+
     # Filter and retrieve IP visits within the last hour from the database
-    recent_ip_visits = str(list(ip_visits_collection.find({"timestamp": {"$gt": hour_ago}})))
-    
+    recent_ip_visits = str(
+        list(ip_visits_collection.find({"timestamp": {"$gt": hour_ago}}))
+    )
+
     return jsonify(recent_ip_visits)
 
 
