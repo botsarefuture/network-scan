@@ -4,6 +4,6 @@ def display_menu():
         "[0] DDoS",
         "[1] Port Scan",
         "[2] Bruteforce",
-        "[3] Subdomain Scan"
+        "[3] Subdomain Scan",
     ]
-    print('\n'.join(menu_options))
+    print("\n".join(menu_options))

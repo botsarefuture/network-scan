@@ -1,8 +1,11 @@
 import pymongo
 
+
 def fetch_results_from_mongodb():
     # Connect to MongoDB (adjust connection details accordingly)
-    client = pymongo.MongoClient("mongodb://10.0.0.1:27017/?directConnection=true&authMechanism=DEFAULT")
+    client = pymongo.MongoClient(
+        "mongodb://10.0.0.1:27017/?directConnection=true&authMechanism=DEFAULT"
+    )
     db = client.scan
     collection = db.results
 
@@ -10,6 +13,7 @@ def fetch_results_from_mongodb():
     data = list(collection.find({}))
 
     return data
+
 
 def check_results(data, checked_ips):
     for result in data:
@@ -27,6 +31,7 @@ def check_results(data, checked_ips):
 
     return checked_ips
 
+
 checked_ips_set = set()
 
 while True:
@@ -37,5 +42,5 @@ while True:
     checked_ips_set = check_results(data_from_mongodb, checked_ips_set)
 
     import time
-    
+
     time.sleep(2)
